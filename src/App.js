@@ -9,7 +9,7 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -29,6 +29,13 @@ const App = () => {
     }
   }, [])
 
+  const notifyWith = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -41,10 +48,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 3000)
+      notifyWith('Wrong credentials', 'error')
     }
   }
 
@@ -70,6 +74,8 @@ const App = () => {
     setNewTitle('')
     setNewAuthor('')
     setNewUrl('')
+
+    notifyWith(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
   }
 
   const loginForm = () => (
@@ -99,28 +105,30 @@ const App = () => {
     </form>
   )
 
+  if (user === null) {
+    return (
+      <div>
+        <h2>log in to application</h2>
+        <Notification notification={notification} />
+
+        {loginForm()}
+    </div>
+    )
+  }
+
   return (
     <div>
-      <Notification message={errorMessage} />
+      <h1>blogs</h1>
+      <Notification notification={notification} />
 
-      {user === null
-        ? (
-        <div>
-          <h2>log in to application</h2>
-          {loginForm()}
-        </div>)
-        : (
-        <div>
-          <h1>blogs</h1>
-          <p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button>
+      <p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button>
 
-          <h2>create new</h2>
-          {blogForm()}
+      <h2>create new</h2>
+      {blogForm()}
 
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
-      </div>)}
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
     </div>
   )
 }
