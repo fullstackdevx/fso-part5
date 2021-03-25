@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -26,6 +26,10 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(blog.id, updatedBlog)
   }
 
+  const handleDelete = () => {
+    deleteBlog(blog.id)
+  }
+
   return (
     <div style={blogStyle}>
       <div>
@@ -35,6 +39,8 @@ const Blog = ({ blog, updateBlog }) => {
         <p>{blog.url}</p>
         <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
         {blog.user && <p>{blog.user.name}</p>}
+        {/* user.id does not returned from the api when login! */}
+        {blog.user.username === user.username && <button onClick={handleDelete}>remove</button>}
       </div>
 
     </div>)

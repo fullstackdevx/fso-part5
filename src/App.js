@@ -96,6 +96,19 @@ const App = () => {
     setBlogs(updatedblogs.sort(compareLikesDescending))
   }
 
+  const deleteBlog = async id => {
+    const toDelete = blogs.find(b => b.id === id)
+    if (confirm(`remove blog ${toDelete.title} by ${toDelete.author}`)) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        notifyWith(`Deleted ${toDelete.name}`)
+      } catch (error) {
+        notifyWith(error.response.data.error, 'error')
+      }
+    }
+  }
+
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
@@ -124,7 +137,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
       )}
     </div>
   )
