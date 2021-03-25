@@ -77,7 +77,9 @@ const App = () => {
     const returnedBlog = await blogService.create(blogObject)
     blogFormRef.current.toggleVisibility()
 
-    setBlogs([...blogs, returnedBlog])
+    // get the returned blog populated with the user info
+    const returnedBlogPopulated = await blogService.get(returnedBlog.id)
+    setBlogs([...blogs, returnedBlogPopulated])
 
     notifyWith(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
   }
