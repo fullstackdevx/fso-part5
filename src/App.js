@@ -15,10 +15,13 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const compareLikesDescending = (a, b) => b.likes - a.likes
+
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort(compareLikesDescending)
       setBlogs(blogs)
-    )
+    })
   }, [])
 
   useEffect(() => {
@@ -89,7 +92,8 @@ const App = () => {
 
     // get the returned blog populated with the user info
     const returnedBlogPopulated = await blogService.get(returnedBlog.id)
-    setBlogs(blogs.map(blog => blog.id === returnedBlogPopulated.id ? returnedBlogPopulated : blog))
+    const updatedblogs = blogs.map(blog => blog.id === returnedBlogPopulated.id ? returnedBlogPopulated : blog)
+    setBlogs(updatedblogs.sort(compareLikesDescending))
   }
 
   const blogForm = () => (
