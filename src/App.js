@@ -122,7 +122,7 @@ const App = () => {
         <Notification notification={notification} />
 
         {loginForm()}
-    </div>
+      </div>
     )
   }
 
