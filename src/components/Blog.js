@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,6 +14,18 @@ const Blog = ({ blog }) => {
     setDetailsVisible(!detailsVisible)
   }
 
+  const handleLike = () => {
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+
+    }
+    updateBlog(blog.id, updatedBlog)
+  }
+
   return (
     <div style={blogStyle}>
       <div>
@@ -21,7 +33,7 @@ const Blog = ({ blog }) => {
       </div>
       <div style={ { display: detailsVisible ? '' : 'none' }}>
         <p>{blog.url}</p>
-        <p>likes {blog.likes} <button>like</button></p>
+        <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
         {blog.user && <p>{blog.user.name}</p>}
       </div>
 

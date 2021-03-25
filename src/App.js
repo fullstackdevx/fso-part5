@@ -84,6 +84,14 @@ const App = () => {
     notifyWith(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
   }
 
+  const updateBlog = async (id, blogObject) => {
+    const returnedBlog = await blogService.update(id, blogObject)
+
+    // get the returned blog populated with the user info
+    const returnedBlogPopulated = await blogService.get(returnedBlog.id)
+    setBlogs(blogs.map(blog => blog.id === returnedBlogPopulated.id ? returnedBlogPopulated : blog))
+  }
+
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
@@ -112,7 +120,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
     </div>
   )
