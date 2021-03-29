@@ -35,7 +35,7 @@ const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
       <div>
         {blog.title} {blog.author} <button onClick={toggleVisibility}>{detailsVisible ? 'hide' : 'view'}</button>
       </div>
-      <div style={ { display: detailsVisible ? '' : 'none' }}>
+      <div style={ { display: detailsVisible ? '' : 'none' }} className='togglableDetail'>
         <p>{blog.url}</p>
         <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
         {blog.user && <p>{blog.user.name}</p>}
