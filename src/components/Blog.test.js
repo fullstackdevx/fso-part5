@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog'
 
@@ -65,4 +65,12 @@ describe('renders content', () => {
     expect(likeButtonElement).toBeFalsy()
   })
   */
+
+  test('after clicking the view button, blogs url and number of likes are displayed', () => {
+    const button = component.getByText(/view/i)
+    fireEvent.click(button)
+
+    const div = component.container.querySelector('.togglableDetail')
+    expect(div).not.toHaveStyle('display: none')
+  })
 })
