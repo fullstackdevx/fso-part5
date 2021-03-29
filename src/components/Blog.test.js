@@ -24,7 +24,6 @@ describe('renders content', () => {
   let component
   beforeEach(() => {
     component = render(<Blog blog={blog} user={user}/>)
-
   })
 
   test('renders title and author', () => {
@@ -74,3 +73,38 @@ describe('renders content', () => {
     expect(div).not.toHaveStyle('display: none')
   })
 })
+
+describe('event handlers', () => {
+  test('clicking the like button twice calls event handler twice', () => {
+    const blog = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      user: {
+        username: 'mluukkai',
+        name: 'Matti Luukkainen'
+      }
+    }
+
+    const user = {
+      username: 'mluukkai'
+    }
+
+    const mockHandler = jest.fn()
+
+    const component = render(<Blog blog={blog} user={user} updateBlog={mockHandler}/>)
+
+    // not nessary but client must do
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
+
+})
+
