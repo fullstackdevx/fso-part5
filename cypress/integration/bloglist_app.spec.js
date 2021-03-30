@@ -44,5 +44,30 @@ describe('bloglist app',  function()  {
         .should('contain', 'Wrong credentials')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
+
+    describe('when logged in ', function () {
+      beforeEach(function() {
+        cy.get('#username').type('mluukkai')
+        cy.get('#password').type('secret')
+        cy.get('#login-button').click()
+      })
+
+      it('A blog can be created', function() {
+        const title = 'First class tests'
+        const author = 'Robert C. Martin'
+        const url = 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html'
+
+        cy.contains('create new')
+        cy.contains('new blog').click()
+
+        cy.get('input[aria-label="title"]').type(title)
+        cy.get('input[aria-label="author"]').type(author)
+        cy.get('input[aria-label="url"]').type(url)
+        cy.get('button[aria-label="create new blog"]').click()
+
+        cy.contains(`a new blog ${title} by ${author} added`)
+        cy.contains('First class tests Robert C. Martin').contains('view')
+      })
+    })
   })
 })

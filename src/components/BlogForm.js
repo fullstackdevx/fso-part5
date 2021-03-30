@@ -31,7 +31,7 @@ const BlogForm = ({ createBlog }) => {
       <div>url
         <input type="text" value={newUrl} name="Url"  aria-label="url" onChange={({ target }) => setNewUrl(target.value)} />
       </div>
-      <button type="submit">create</button>
+      <button type="submit" aria-label="create new blog">create</button>
     </form>)
 }
 
