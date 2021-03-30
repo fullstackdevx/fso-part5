@@ -40,8 +40,9 @@ describe('bloglist app',  function()  {
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
 
-      cy.get('.error').should('contain', 'Wrong credentials')
-      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.get('.error')
+        .should('contain', 'Wrong credentials')
+        .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
 })
