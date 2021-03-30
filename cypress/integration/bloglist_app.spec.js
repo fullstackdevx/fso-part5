@@ -47,10 +47,14 @@ describe('bloglist app',  function()  {
 
     describe('when logged in ', function () {
       beforeEach(function() {
-        cy.get('#username').type('mluukkai')
-        cy.get('#password').type('secret')
-        cy.get('#login-button').click()
+        cy.request('POST', 'http://localhost:3003/api/login', {
+          username: 'mluukkai', password: 'secret'
+        }).then(response => {
+          localStorage.setItem('loggedBlogappUser', JSON.stringify(response.body))
+          cy.visit('http://localhost:3000')
+        })
       })
+
 
       it('A blog can be created', function() {
         const title = 'First class tests'
