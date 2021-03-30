@@ -75,18 +75,11 @@ describe('bloglist app',  function()  {
 
       describe('and several blog exist', function (){
         beforeEach(function () {
-          cy.request({
-            url: 'http://localhost:3003/api/blogs',
-            method: 'POST',
-            body: {
-              title: 'First class tests',
-              author: 'Robert C. Martin',
-              url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html' },
-            headers: {
-              'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogappUser')).token}`
-            }
+          cy.createBlog({
+            title: 'First class tests',
+            author: 'Robert C. Martin',
+            url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html'
           })
-          cy.visit('http://localhost:3000')
         })
 
         it('A user can like a blog', function (){
