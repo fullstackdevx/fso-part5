@@ -72,6 +72,30 @@ describe('bloglist app',  function()  {
         cy.contains(`a new blog ${title} by ${author} added`)
         cy.contains('First class tests Robert C. Martin').contains('view')
       })
+
+      describe('and several blog exist', function (){
+        beforeEach(function () {
+          cy.contains('new blog').click()
+          cy.get('input[aria-label="title"]').type('First class tests')
+          cy.get('input[aria-label="author"]').type('Robert C. Martin')
+          cy.get('input[aria-label="url"]').type('http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html')
+          cy.get('button[aria-label="create new blog"]').click()
+        })
+
+        it('A user can like a blog', function (){
+          cy.contains('First class tests Robert C. Martin')
+            .contains('view')
+            .click()
+
+          cy.contains('First class tests Robert C. Martin').parent()
+            .contains('likes 0')
+            .contains('like')
+            .click()
+
+          cy.contains('First class tests Robert C. Martin').parent()
+            .contains('likes 1')
+        })
+      })
     })
   })
 })
