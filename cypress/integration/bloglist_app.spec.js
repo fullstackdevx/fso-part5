@@ -89,6 +89,19 @@ describe('bloglist app',  function()  {
           cy.contains('First class tests Robert C. Martin').parent()
             .contains('likes 1')
         })
+
+        it('a user who created a blog can delete it', function (){
+          cy.contains('First class tests Robert C. Martin')
+            .contains('view')
+            .click()
+
+          cy.contains('First class tests Robert C. Martin').parent()
+            .contains('remove')
+            .click()
+
+          cy.contains('Deleted First class tests')
+          cy.get('html').should('not.contain', 'First class tests Robert C. Martin')
+        })
       })
     })
   })

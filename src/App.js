@@ -102,7 +102,7 @@ const App = () => {
       try {
         await blogService.remove(id)
         setBlogs(blogs.filter(blog => blog.id !== id))
-        notifyWith(`Deleted ${toDelete.name}`)
+        notifyWith(`Deleted ${toDelete.title}`)
       } catch (error) {
         notifyWith(error.response.data.error, 'error')
       }
