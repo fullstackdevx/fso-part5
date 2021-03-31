@@ -69,6 +69,20 @@ describe('bloglist app',  function()  {
             author: 'Robert C. Martin',
             url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html'
           })
+
+          cy.createBlog({
+            title: 'React patterns',
+            author: 'Michael Chan',
+            url: 'https://reactpatterns.com/',
+            likes: 2
+          })
+
+          cy.createBlog({
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+            likes: 1
+          })
         })
 
         it('A user can like a blog', function (){
@@ -83,6 +97,36 @@ describe('bloglist app',  function()  {
 
           cy.contains('First class tests Robert C. Martin').parent()
             .contains('likes 1')
+        })
+
+        it('blogs are ordered according to likes descending', function(){
+          const blogsTitlesAtStart = ['React patterns', 'Go To Statement Considered Harmful', 'First class tests']
+
+          cy.get('.blog')
+            .should('have.length', 3)
+            .each((blog, index) => {
+              cy.wrap(blog).should('contain', blogsTitlesAtStart[index])
+            })
+
+          cy.contains('First class tests Robert C. Martin').contains('view').click()
+
+          cy.contains('First class tests Robert C. Martin').parent().contains('like').as('firstClassLikeButton')
+
+          cy.get('@firstClassLikeButton').click()
+          cy.contains('First class tests Robert C. Martin').parent().contains('likes 1')
+
+          cy.get('@firstClassLikeButton').click()
+          cy.contains('First class tests Robert C. Martin').parent().contains('likes 2')
+
+          cy.get('@firstClassLikeButton').click()
+          cy.contains('First class tests Robert C. Martin').parent().contains('likes 3')
+
+          const blogsTitlesAtEnd = ['First class tests', 'React patterns', 'Go To Statement Considered Harmful']
+
+          cy.get('.blog')
+            .each((blog, index) => {
+              cy.wrap(blog).should('contain', blogsTitlesAtEnd[index])
+            })
         })
 
         it('a user who created a blog can delete it', function (){
