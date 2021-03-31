@@ -1,3 +1,11 @@
+Cypress.Commands.add('createUser', ({ name, username, password }) => {
+  cy.request({
+    url: 'http://localhost:3003/api/users',
+    method: 'POST',
+    body: { name, username, password }
+  })
+})
+
 Cypress.Commands.add('login', ({ username, password }) => {
   cy.request({
     url: 'http://localhost:3003/api/login',

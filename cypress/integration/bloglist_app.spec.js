@@ -1,18 +1,13 @@
 describe('bloglist app',  function()  {
   beforeEach(function() {
-    //reset users and blogs
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
 
-    //creates a user
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
+    cy.createUser({
       name: 'Matti Luukkainen',
       username: 'mluukkai',
       password: 'secret'
-    }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    })
 
-    //opens the web
     cy.visit('http://localhost:3000')
   })
 
@@ -101,6 +96,31 @@ describe('bloglist app',  function()  {
 
           cy.contains('Deleted First class tests')
           cy.get('html').should('not.contain', 'First class tests Robert C. Martin')
+        })
+
+        describe('and a user without blogs logged in', function(){
+
+          beforeEach(function(){
+            cy.createUser({
+              name: 'Arto Hellas',
+              username: 'hellas',
+              password: 'pass'
+            })
+
+            localStorage.removeItem('loggedBlogappUser')
+            cy.visit('http://localhost:3000')
+
+            cy.login({ username: 'hellas', password: 'pass' })
+          })
+
+          it('a user who does not create the blog can not delete it', function() {
+            cy.contains('First class tests Robert C. Martin')
+              .contains('view')
+              .click()
+
+            cy.contains('First class tests Robert C. Martin').parent('div')
+              .should('not.contain','remove')
+          })
         })
       })
     })
